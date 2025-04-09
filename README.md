@@ -93,8 +93,7 @@ php bin/console messenger:consume scheduler_email
 
 ## Remarques
 
-- Les commandes sont adaptées à un environnement Windows avec Git Bash :  
-  vous pouvez adapter les commandes selon votre environnement.
+- Les commandes sont adaptées à un environnement Windows avec Git Bash, vous pouvez adapter les commandes selon votre environnement.
 - Le projet n’ayant pas pour but d’être en production, par simplicité :
   - Le SSL est désactivé.
   - Aucune vérification de données n’est faite (back comme front).
