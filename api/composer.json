@@ -23,6 +23,7 @@
     "symfony/dotenv": "7.2.*",
     "symfony/expression-language": "7.2.*",
     "symfony/flex": "^2.5",
+    "symfony/form": "7.2.*",
     "symfony/framework-bundle": "7.2.*",
     "symfony/mailer": "7.2.*",
     "symfony/messenger": "7.2.*",
@@ -87,6 +88,7 @@
     }
   },
   "require-dev": {
+    "doctrine/doctrine-fixtures-bundle": "^4.1",
     "symfony/maker-bundle": "^1.62.1"
   }
 }
