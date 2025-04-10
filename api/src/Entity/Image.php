@@ -7,8 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
+#[ApiResource(
+    operations: [
+        new GetCollection(uriTemplate: '/images', name: 'app_image_list'),
+        new Get(uriTemplate: '/images/{id}', name: 'app_image_show'),
+        new Get(uriTemplate: '/images/{id}/file', name: 'get_image_file'),
+        new Post(uriTemplate: '/images/upload', name: 'app_image_upload')
+])]
 class Image
 {
     #[ORM\Id]
