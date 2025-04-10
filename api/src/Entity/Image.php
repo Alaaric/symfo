@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
 use App\Repository\ImageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,7 +19,8 @@ use ApiPlatform\Metadata\GetCollection;
         new GetCollection(uriTemplate: '/images', name: 'app_image_list'),
         new Get(uriTemplate: '/images/{id}', name: 'app_image_show'),
         new Get(uriTemplate: '/images/{id}/file', name: 'get_image_file'),
-        new Post(uriTemplate: '/images/upload', name: 'app_image_upload')
+        new Post(uriTemplate: '/images/upload', name: 'app_image_upload'),
+        new Delete(uriTemplate: '/images/{id}', name: 'app_image_delete')
 ])]
 class Image
 {

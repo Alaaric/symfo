@@ -5,8 +5,14 @@ namespace App\Entity;
 use App\Repository\StatRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ORM\Entity(repositoryClass: StatRepository::class)]
+#[ApiResource(
+    operations: [
+        new GetCollection(uriTemplate: '/stats', name: 'get_all_stats')
+])]
 class Stat
 {
     #[ORM\Id]
