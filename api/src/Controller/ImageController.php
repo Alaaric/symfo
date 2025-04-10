@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Image;
 use App\Entity\Stat;
+use App\Service\ImageService;
+use App\Service\StatsTracker;
 use App\Repository\ImageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,35 +25,28 @@ final class ImageController extends AbstractController
         )
     {
     }
-    #[Route(name: 'app_image_index', methods: ['GET'])]
+
+    #[Route(name: 'get_all_image', methods: ['GET'])]
     public function index(ImageRepository $imageRepository): JsonResponse
     {
         $images = $imageRepository->findAll();
-
         $data = $this->serializer->serialize($images, 'json', ['groups' => ['image:read']]);
     
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/new', name: 'app_image_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/new', name: 'new_image', methods: ['GET', 'POST'])]
+    public function new(Request $request, ImageService $imageService): JsonResponse
     {
         $uploadedFile = $request->files->get('image');
-
         $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
-        $uniqueName = uniqid() . '.' . $uploadedFile->guessExtension();
-        $uploadedFile->move($destination, $uniqueName);
+        
+        $image = $imageService->uploadAndSaveImage($uploadedFile, $destination);
 
-        $image = new Image();
-        $image->setFileName($uniqueName);
-        $image->setName($uploadedFile->getClientOriginalName() ?? '');
-        $entityManager->persist($image);
-        $entityManager->flush();
-
-        return $this->json(['message' => 'Image uploaded', 'filename' => $uniqueName]);
+        return $this->json(['message' => 'Image uploaded', 'filename' => $image->getFileName()], Response::HTTP_CREATED);
     }
 
-    #[Route('/{id}', name: 'app_image_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'get_image', methods: ['GET'])]
     public function show(Image $image): JsonResponse
     {
         $serialisedImage = $this->serializer->serialize($image, 'json', ['groups' => ['image:read']]);
@@ -59,46 +54,25 @@ final class ImageController extends AbstractController
     }
 
     #[Route('/{id}/file', name: 'get_image_file', methods: ['GET'])]
-    public function getImageFile(Request $request,Image $image,  EntityManagerInterface $em): BinaryFileResponse
+    public function getImageFile(Request $request, Image $image, StatsTracker $statsTracker): BinaryFileResponse
     {
-        $filename = $image->getFilename();
-        $filepath = $this->getParameter('images_directory') . '/' . $filename;
-
+        $filepath = $this->getParameter('images_directory') . '/' . $image->getFilename();
         $port = $request->getPort();
+
         if ($port !== 8001) {
-            $week = (new \DateTime())->format('o-\WW');
+
+            $statsTracker->trackImageView($image);
             
-            $statRepo = $em->getRepository(Stat::class);
-            $stat = $statRepo->findOneBy([
-                'image' => $image,
-                'week' => $week,
-            ]);
-
-            if (!$stat) {
-                $stat = new Stat();
-                $stat->setImage($image);
-                $stat->setWeek($week);
-                $stat->setViews(1);
-                $em->persist($stat);
-            } else {
-                $stat->setViews($stat->getViews() + 1);
-            }
-
-            $em->flush();
         }
 
-        if (!file_exists($filepath)) {
-            throw $this->createNotFoundException('Image file not found');
-        }
-
-        return new BinaryFileResponse($filepath, 200, []);
+        return new BinaryFileResponse($filepath, Response::HTTP_OK, []);
     }
 
-    #[Route('/{id}', name: 'app_image_delete', methods: ['POST'])]
-    public function delete(Image $image, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/{id}', name: 'delete_image', methods: ['POST'])]
+    public function delete(Image $image): JsonResponse
     {
-        $entityManager->remove($image);
-        $entityManager->flush();
+        $this->entityManager->remove($image);
+        $this->entityManager->flush();
 
         return $this->json(['message' => 'Image deleted'], Response::HTTP_NO_CONTENT);
     }

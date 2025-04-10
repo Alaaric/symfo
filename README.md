@@ -43,7 +43,21 @@
 
 ---
 
-3. Utilisation des commandes Make
+3. Créer la base de données avec les fixtures de test
+
+Depuis le dossier `api` :
+
+```bash
+php bin/console d:d:c
+
+php bin/console d:m:m
+
+php bin/console d:f:l
+```
+
+---
+
+4. Utilisation des commandes Make
    Le Makefile propose des cibles pour lancer ou arrêter chaque application individuellement, ainsi qu’une commande générale pour tout lancer/arrêter.
 
 - Lancer toutes les applications (client, admin et API) :
@@ -76,7 +90,7 @@
 
 ---
 
-4. Pour vérifier que vos projets sont bien démarrés, vous pouvez vous rendre sur :
+5. Pour vérifier que vos projets sont bien démarrés, vous pouvez vous rendre sur :
 
 - http://127.0.0.1:8000 pour le client
 - http://127.0.0.1:8001 pour l’admin
@@ -86,6 +100,7 @@
 
 ```bash
 php bin/console messenger:consume async
+
 php bin/console messenger:consume scheduler_email
 ```
 
