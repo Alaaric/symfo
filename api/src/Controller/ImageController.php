@@ -17,12 +17,18 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/images')]
 final class ImageController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private SerializerInterface $serializer,
+        )
+    {
+    }
     #[Route(name: 'app_image_index', methods: ['GET'])]
-    public function index(SerializerInterface $serializer, ImageRepository $imageRepository): JsonResponse
+    public function index(ImageRepository $imageRepository): JsonResponse
     {
         $images = $imageRepository->findAll();
 
-        $data = $serializer->serialize($images, 'json', ['groups' => ['image:read']]);
+        $data = $this->serializer->serialize($images, 'json', ['groups' => ['image:read']]);
     
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
@@ -48,7 +54,8 @@ final class ImageController extends AbstractController
     #[Route('/{id}', name: 'app_image_show', methods: ['GET'])]
     public function show(Image $image): JsonResponse
     {
-        return $this->json($image);
+        $serialisedImage = $this->serializer->serialize($image, 'json', ['groups' => ['image:read']]);
+        return new JsonResponse($serialisedImage, Response::HTTP_OK, [], true);
     }
 
     #[Route('/{id}/file', name: 'get_image_file', methods: ['GET'])]
