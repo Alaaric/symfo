@@ -1,0 +1,41 @@
+{# templates/images/images.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Images{% endblock %}
+
+{% block body %}
+    <h1>Liste des Images</h1>
+
+    <form action="{{ path('upload_image') }}" method="post" enctype="multipart/form-data">
+        <label for="image">Séléctionnez une image :</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <button type="submit">La Téléverser</button>
+    </form>
+
+    <h2>Images disponibles</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Image</th>
+                <th>Lien</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for image in images %}
+                <tr>
+                    
+                    <td>{{ image.name }}</td>
+                    <td>
+                        <img src="http://127.0.0.1:8000/images/{{ image.id }}" alt="{{ image.name }}" style="max-width: 100px; max-height: 100px;">
+                    </td>
+                    <td><a href="http://localhost:8002/images/{{ image.id }}/file" target="_blank">Voir</a></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucune image disponible.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

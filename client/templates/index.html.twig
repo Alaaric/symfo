@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h2>Bienvenue dans la librairie d'image</h2>
+    <div>
+        <form id="formulaire_téléchargement" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Télécharger une image</button>
+        </form>
+
+        <div id="liste_des_images">
+            <h3>Images Disponibles</h3>
+            <ul id="liens_des_images">
+                blablabla
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
