@@ -39,7 +39,7 @@ final class ImageController extends AbstractController
     public function new(Request $request, ImageService $imageService): JsonResponse
     {
         $uploadedFile = $request->files->get('image');
-        $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
+        $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/images';
         
         $image = $imageService->uploadAndSaveImage($uploadedFile, $destination);
 
