@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Dto\UploadedImageInfosDto;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ImageRepository
@@ -27,14 +28,15 @@ class ImageRepository
         return $response->getContent();
     }
 
-    public function uploadImage(string $filePath): array
+    public function uploadImage(UploadedImageInfosDto $dto): array
     {
         $response = $this->httpClient->request('POST', self::API_URL . 'images/new', [
             'headers' => [
                 'Content-Type' => 'multipart/form-data',
             ],
             'body' => [
-                'image' => fopen($filePath, 'r'),
+                'image' => fopen($dto->filePath, 'r'),
+                'originalName' => $dto->originalName,
             ],
         ]);
     

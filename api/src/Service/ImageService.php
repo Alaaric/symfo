@@ -16,10 +16,10 @@ class ImageService
     ) {
     }
 
-    public function uploadAndSaveImage(UploadedFile $file, string $destination): Image
+    public function uploadAndSaveImage(UploadedFile $file, string $originalName, string $destination): Image
     {
         $uniqueName = $this->fileUploader->upload($file, $destination);
-        $image = $this->imageFactory->create($uniqueName, $file->getClientOriginalName());
+        $image = $this->imageFactory->create($uniqueName, $originalName);
 
         $this->entityManager->persist($image);
         $this->entityManager->flush();

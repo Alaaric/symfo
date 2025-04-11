@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Image;
-use App\Entity\Stat;
 use App\Service\ImageService;
 use App\Service\StatsTracker;
 use App\Repository\ImageRepository;
@@ -39,9 +38,10 @@ final class ImageController extends AbstractController
     public function new(Request $request, ImageService $imageService): JsonResponse
     {
         $uploadedFile = $request->files->get('image');
+        $originalName = $request->request->get('originalName');
         $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/images';
-        
-        $image = $imageService->uploadAndSaveImage($uploadedFile, $destination);
+
+        $image = $imageService->uploadAndSaveImage($uploadedFile,  $originalName, $destination);
 
         return $this->json(['message' => 'Image uploaded', 'filename' => $image->getFileName()], Response::HTTP_CREATED);
     }
@@ -88,6 +88,12 @@ final class ImageController extends AbstractController
     #[Route('/{id}', name: 'delete_image', methods: ['POST'])]
     public function delete(Image $image): JsonResponse
     {
+        $filePath = $this->getParameter('images_directory') . '/' . $image->getFilename();
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
         $this->entityManager->remove($image);
         $this->entityManager->flush();
 
