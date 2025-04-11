@@ -23,7 +23,6 @@ final class ImageController extends AbstractController
     {
         $data = $this->imageRepository->getAllImages();
 
-        //remplacer ça par des render (faudra faire une belle vue twig avec les options qui vont bien)
         return $this->render('images/images.html.twig', [
             'images' => $data,
         ]);
