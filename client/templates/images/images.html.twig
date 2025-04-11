@@ -27,7 +27,7 @@
                     
                     <td>{{ image.name }}</td>
                     <td>
-                        <img src="http://127.0.0.1:8000/images/{{ image.id }}" alt="{{ image.name }}" style="max-width: 100px; max-height: 100px;">
+                        <img src="http://localhost:8002/uploads/images/{{ image.file_name }}" alt="{{ image.name }}" style="max-width: 100px; max-height: 100px;">
                     </td>
                     <td><a href="http://localhost:8002/images/{{ image.id }}/file" target="_blank">Voir</a></td>
                 </tr>
