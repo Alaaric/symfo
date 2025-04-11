@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Factory\UploadedImageInfosDtoFactory;
 use App\Repository\ImageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,11 @@ final class ImageController extends AbstractController
 {
     private ImageRepository $imageRepository;
 
-    public function __construct(ImageRepository $imageRepository)
+    public function __construct(
+        ImageRepository $imageRepository,
+        private UploadedImageInfosDtoFactory $dtoFactory
+
+        )
     {
         $this->imageRepository = $imageRepository;
     }
@@ -23,7 +28,6 @@ final class ImageController extends AbstractController
     {
         $data = $this->imageRepository->getAllImages();
 
-        //remplacer ça par des render (faudra faire une belle vue twig avec les options qui vont bien)
         return $this->render('images/images.html.twig', [
             'images' => $data,
         ]);
@@ -48,8 +52,8 @@ final class ImageController extends AbstractController
             return $this->json(['error' => 'No file provided'], Response::HTTP_BAD_REQUEST);
         }
 
-        $filePath = $file->getPathname();
-        $result = $this->imageRepository->uploadImage($filePath);
+        $dto = $this->dtoFactory->createFromUploadedFile($file);
+        $result = $this->imageRepository->uploadImage($dto);
 
         return $this->json($result);
     }
