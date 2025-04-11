@@ -35,3 +35,60 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+thead {
+    background-color: #222;
+    color: white;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #2a2a2a;
+    color: #eee;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #1e1e1e;
+    color: #ddd;
+}
+
+a {
+    color: #1e90ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    border: 1px solid #444;
+    border-radius: 4px;
+}
+
+a.button-link {
+    display: inline-block;
+    background-color: #4169e1; /* Bleu roi */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-right: 8px;
+}
+
+a.button-link:hover {
+    background-color: #274bbf; /* un peu plus foncé au hover */
+}
