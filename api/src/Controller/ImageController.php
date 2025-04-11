@@ -68,6 +68,23 @@ final class ImageController extends AbstractController
         return new BinaryFileResponse($filepath, Response::HTTP_OK, []);
     }
 
+    #[Route('/{id}/download', name: 'get_image_file', methods: ['GET'])]
+    public function downloadImageFile(Request $request, Image $image, StatsTracker $statsTracker): BinaryFileResponse
+    {
+        $filepath = $this->getParameter('images_directory') . '/' . $image->getFilename();
+        $port = $request->getPort();
+
+        if ($port !== 8001) {
+
+            $statsTracker->trackImageView($image);
+            
+        }
+
+        return new BinaryFileResponse($filepath, Response::HTTP_OK, [
+            'Content-Disposition' => 'attachment; filename="' . $image->getFilename()
+        ]);
+    }
+
     #[Route('/{id}', name: 'delete_image', methods: ['POST'])]
     public function delete(Image $image): JsonResponse
     {
