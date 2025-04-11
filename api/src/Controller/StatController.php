@@ -2,17 +2,18 @@
 
 namespace App\Controller;
 
+use App\Mapper\StatOutputDtoMapper;
 use App\Repository\StatRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/stats')]
 final class StatController extends AbstractController
 {
     public function __construct(
-        private StatRepository $statRepository
+        private StatRepository $statRepository,
+        private StatOutputDtoMapper $statMapper
     ) {
     }
 
@@ -21,6 +22,8 @@ final class StatController extends AbstractController
     {
         $stats = $this->statRepository->findAll();
 
-        return $this->json($stats, Response::HTTP_OK);
+        $data = $this->statMapper->mapToStatOutputDto($stats);
+
+        return $this->json($data);
     }
 }
