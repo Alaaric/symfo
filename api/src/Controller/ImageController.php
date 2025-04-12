@@ -77,7 +77,7 @@ final class ImageController extends AbstractController
         }
 
         return new BinaryFileResponse($filepath, Response::HTTP_OK, [
-            'Content-Disposition' => 'attachment; filename="' . $image->getFilename()
+            'Content-Disposition' => 'attachment; filename="' . $image->getFilename() . '"',
         ]);
     }
 

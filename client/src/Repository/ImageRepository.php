@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Dto\UploadedImageInfosDto;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class ImageRepository
 {
@@ -26,6 +27,11 @@ class ImageRepository
         $response = $this->httpClient->request('GET', self::API_URL . 'images/' . $id . '/file');
 
         return $response->getContent();
+    }
+
+    public function downloadImageById(int $id): ResponseInterface
+    {
+        return $this->httpClient->request('GET', self::API_URL . 'images/download/' . $id);
     }
 
     public function uploadImage(UploadedImageInfosDto $dto): array

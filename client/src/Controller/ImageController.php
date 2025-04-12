@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\ImageDownloadService;
 
 #[Route('/images')]
 final class ImageController extends AbstractController
@@ -18,8 +19,7 @@ final class ImageController extends AbstractController
         ImageRepository $imageRepository,
         private UploadedImageInfosDtoFactory $dtoFactory
 
-        )
-    {
+    ) {
         $this->imageRepository = $imageRepository;
     }
 
@@ -41,7 +41,18 @@ final class ImageController extends AbstractController
         return new Response($data, Response::HTTP_OK, [
             'Content-Type' => 'image/jpeg',
         ]);
-    } 
+    }
+
+    #[Route('/download/{id}', name: 'download_image', methods: ['GET'])]
+    public function downloadImage(int $id, ImageDownloadService $imageDownloadService): Response
+    {
+        $downloadData = $imageDownloadService->getDownloadData($id);
+
+        return new Response($downloadData['content'], Response::HTTP_OK, [
+            'Content-Type' => $downloadData['contentType'],
+            'Content-Disposition' => 'attachment; filename="' . $downloadData['filename'] . '"',
+        ]);
+    }
 
     #[Route('/upload', name: 'upload_image', methods: ['POST'])]
     public function upload(Request $request): Response
