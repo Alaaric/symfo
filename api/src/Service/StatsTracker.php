@@ -42,6 +42,6 @@ class StatsTracker
 
     private function getCurrentWeek(): string
     {
-        return (new \DateTime())->format('o-\WW');
+        return (new \DateTime())->format('o-W');
     }
 }

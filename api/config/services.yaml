@@ -22,7 +22,7 @@ services:
       - "../src/Entity/"
       - "../src/Kernel.php"
 
-  App\Command\EmailCommand:
+  App\Service\EmailService:
     arguments:
       $email: "%email%"
 

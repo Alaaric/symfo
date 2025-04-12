@@ -3,6 +3,7 @@
 namespace App\Scheduler;
 
 use App\Scheduler\Message\SendEmail;
+use App\Service\EmailService;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\Schedule;
 use Symfony\Component\Scheduler\ScheduleProviderInterface;
@@ -13,19 +14,23 @@ class EmailScheduleProvider implements ScheduleProviderInterface
 {
     private ?Schedule $schedule = null;
 
-    public function __construct(private string $email) {}
+    public function __construct(
+        private EmailService $emailService,
+        private string $email,
+    ) {}
 
     public function getSchedule(): Schedule
     {
         return $this->schedule ??= (new Schedule())
-        ->with(
-            RecurringMessage::every('2 minutes', 
-                new SendEmail(
-                    $this->email,
-                    'Weekly repport',
-                    'This is your weekly stat Report.'
+            ->with(
+                RecurringMessage::cron(
+                    '0 8 * * 1',
+                    new SendEmail(
+                        $this->email,
+                        'Weekly Report',
+                        content: ""
+                    )
                 )
-            )
-        );
+            );
     }
 }

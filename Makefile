@@ -7,6 +7,12 @@ start-admin:
 start-api:
 	cd api && symfony server:start --port=8002 --no-tls &
 
+start-worker-api:
+    cd api && php bin/console messenger:consume async &
+
+start-scheduler-api:
+    cd api && php bin/console messenger:consume scheduler_email &
+
 
 stop-port:
 	@PORT=$(port) && \
@@ -18,6 +24,9 @@ stop-port:
 		echo "No process found on port $$PORT"; \
 	fi
 
+stop-workers:
+	cd api && php bin/console messenger:stop-workers
+
 stop-client:
 	$(MAKE) port=8000 stop-port
 
@@ -27,6 +36,6 @@ stop-admin:
 stop-api:
 	$(MAKE) port=8002 stop-port
 
-start-all: start-client start-admin start-api
+start-all: start-client start-admin start-api start-worker-api start-scheduler-api
 
-stop-all: stop-client stop-admin stop-api
+stop-all: stop-workers stop-client stop-admin stop-api 

@@ -7,8 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use App\Service\EmailService;
 
 #[AsCommand(
     name: 'lc:email',
@@ -16,12 +15,10 @@ use Symfony\Component\Mime\Email;
 )]
 class EmailCommand extends Command
 {
-    
+
     public function __construct(
-        private MailerInterface $mailer,
-        private string $email
-    )
-    {
+        private EmailService $emailService
+    ) {
         parent::__construct();
     }
 
@@ -29,13 +26,12 @@ class EmailCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $email = (new Email())
-            ->to($this->email)
-            ->subject('test Email')
-            ->text('placeholder text'); 
-        $this->mailer->send($email);
-
-        $io->success('Email sent');
+        try {
+            $this->emailService->sendWeeklyStatsEmail();
+            $io->success('Email sent');
+        } catch (\RuntimeException $e) {
+            $io->warning($e->getMessage());
+        }
 
         return Command::SUCCESS;
     }
