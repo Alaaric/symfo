@@ -114,3 +114,4 @@ php bin/console messenger:consume scheduler_email
   - Aucune vérification de données n’est faite (back comme front).
   - Aucune protection n’est en place.
   - Les images sont enregistrés dans un dossier public et donc accessible sans controle
+  - L'architecture est loin d'être correct
