@@ -24,7 +24,7 @@ class ImageRepository
     public function getImageById(int $id): string
     {
         $response = $this->httpClient->request('GET', self::API_URL . 'images/' . $id . '/file');
-  
+
         return $response->getContent();
     }
 
@@ -39,7 +39,7 @@ class ImageRepository
                 'originalName' => $dto->originalName,
             ],
         ]);
-    
+
         return $response->toArray();
     }
 }

@@ -16,12 +16,14 @@ use ApiPlatform\Metadata\GetCollection;
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/images', name: 'app_image_list'),
-        new Get(uriTemplate: '/images/{id}', name: 'app_image_show'),
-        new Get(uriTemplate: '/images/{id}/file', name: 'get_image_file'),
-        new Post(uriTemplate: '/images/upload', name: 'app_image_upload'),
-        new Delete(uriTemplate: '/images/{id}', name: 'app_image_delete')
-])]
+        new GetCollection(uriTemplate: '/images', name: 'get_all_image'),
+        new Get(uriTemplate: '/images/{id}', name: 'get_image'),
+        new Get(uriTemplate: '/images/{id}/file', name: 'view_image'),
+        new Get(uriTemplate: '/images/download/{id}', name: 'get_image_file'),
+        new Post(uriTemplate: '/images/upload', name: 'new_image'),
+        new Delete(uriTemplate: '/images/{id}', name: 'delete_image')
+    ]
+)]
 class Image
 {
     #[ORM\Id]
