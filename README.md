@@ -8,7 +8,7 @@
 
 ## Prérequis
 
-- Avoir PHP et Composer installés.
+- Avoir PHP 8.3 et Composer installés.
 - Avoir la CLI Symfony installée
 - Avoir un serveur SMTP (celui de gmail par exemple)
 
@@ -58,7 +58,7 @@ php bin/console d:f:l
 ---
 
 4. Utilisation des commandes Make
-   Le Makefile propose des cibles pour lancer ou arrêter chaque application individuellement, ainsi qu’une commande générale pour tout lancer/arrêter.
+   Le Makefile propose des commandes pour lancer ou arrêter chaque application individuellement, ainsi qu’une commande générale pour tout lancer/arrêter.
 
 - Lancer toutes les applications (client, admin et API) :
 
@@ -108,8 +108,9 @@ php bin/console messenger:consume scheduler_email
 
 ## Remarques
 
-- Les commandes sont adaptées à un environnement Windows avec Git Bash, vous pouvez adapter les commandes selon votre environnement.
-- Le projet n’ayant pas pour but d’être en production, par simplicité :
+- Les commandes sont adaptées à un environnement Windows avec Git Bash, vous pouvez adapter les commandes selon votre environnement ou lancer manuellement chaque symfony sur les bon port.
+- Le projet n’ayant pas pour but d’être en production et est plus un POC qu'une réel application, par simplicité :
   - Le SSL est désactivé.
   - Aucune vérification de données n’est faite (back comme front).
   - Aucune protection n’est en place.
+  - Les images sont enregistrés dans un dossier public et donc accessible sans controle
