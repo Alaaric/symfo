@@ -21,16 +21,14 @@ final class ImageController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private SerializerInterface $serializer,
-        )
-    {
-    }
+    ) {}
 
     #[Route(name: 'get_all_image', methods: ['GET'])]
     public function index(ImageRepository $imageRepository): JsonResponse
     {
         $images = $imageRepository->findAll();
         $data = $this->serializer->serialize($images, 'json', ['groups' => ['image:read']]);
-    
+
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
@@ -53,31 +51,29 @@ final class ImageController extends AbstractController
         return new JsonResponse($serialisedImage, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/{id}/file', name: 'get_image_file', methods: ['GET'])]
+    #[Route('/{id}/file', name: 'view_image', methods: ['GET'])]
     public function getImageFile(Request $request, Image $image, StatsTracker $statsTracker): BinaryFileResponse
     {
+
         $filepath = $this->getParameter('images_directory') . '/' . $image->getFilename();
         $port = $request->getPort();
 
         if ($port !== 8001) {
 
-            $statsTracker->trackImageView($image);
-            
+            $statsTracker->trackStat($image, 'view');
         }
 
         return new BinaryFileResponse($filepath, Response::HTTP_OK, []);
     }
 
-    #[Route('/{id}/download', name: 'get_image_file', methods: ['GET'])]
+    #[Route('/download/{id}', name: 'get_image_file', methods: ['GET'])]
     public function downloadImageFile(Request $request, Image $image, StatsTracker $statsTracker): BinaryFileResponse
     {
         $filepath = $this->getParameter('images_directory') . '/' . $image->getFilename();
         $port = $request->getPort();
 
         if ($port !== 8001) {
-
-            $statsTracker->trackImageView($image);
-            
+            $statsTracker->trackStat($image, 'download');
         }
 
         return new BinaryFileResponse($filepath, Response::HTTP_OK, [

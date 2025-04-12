@@ -19,6 +19,7 @@ class StatOutputDtoMapper
                 $stat->getId(),
                 $stat->getWeek(),
                 $stat->getViews(),
+                $stat->getDownload(),
                 $stat->getImage()->getId(),
                 $stat->getImage()->getName()
             );
