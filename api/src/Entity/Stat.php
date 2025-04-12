@@ -32,6 +32,9 @@ class Stat
     #[Groups(['image:read'])]
     private ?int $views = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $download = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +72,18 @@ class Stat
     public function setViews(?int $views): static
     {
         $this->views = $views;
+
+        return $this;
+    }
+
+    public function getDownload(): ?int
+    {
+        return $this->download;
+    }
+
+    public function setDownload(?int $download): static
+    {
+        $this->download = $download;
 
         return $this;
     }

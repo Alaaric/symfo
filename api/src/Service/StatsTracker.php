@@ -14,7 +14,7 @@ class StatsTracker
         private StatFactory $statFactory
     ) {}
 
-    public function trackImageView(Image $image): void
+    public function trackStat(Image $image, string $action): void
     {
         $week = $this->getCurrentWeek();
         $statRepo = $this->entityManager->getRepository(Stat::class);
@@ -22,13 +22,19 @@ class StatsTracker
 
         if (!$stat) {
 
-            $stat = $this->statFactory->create($image, $week);
+            $stat = match ($action) {
+                'view' => $this->statFactory->createWithViewStat($image, $week),
+                'download' => $this->statFactory->createWithDownloadStat($image, $week),
+                default => throw new \InvalidArgumentException('Invalid action type'),
+            };
+
             $this->entityManager->persist($stat);
-
         } else {
-
-            $stat->setViews($stat->getViews() + 1);
-            
+            match ($action) {
+                'view' => $stat->setViews(($stat->getViews() ?? 0) + 1),
+                'download' => $stat->setDownload(($stat->getDownload() ?? 0) + 1),
+                default => throw new \InvalidArgumentException('Invalid action type'),
+            };;
         }
 
         $this->entityManager->flush();
