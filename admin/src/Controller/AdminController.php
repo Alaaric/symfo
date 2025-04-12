@@ -19,6 +19,7 @@ final class AdminController extends AbstractController
         private StatRepository $statRepository
     ) {}
 
+    //Alaric
     /*#[Route(name: 'app_admin')]
     public function index(): Response
     {
@@ -37,7 +38,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
+    /* #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
     public function getAllStats(): JsonResponse
     {
         try {
@@ -48,25 +49,25 @@ final class AdminController extends AbstractController
         }
     }
 
-    // #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['DELETE'])]
-    // public function deleteImage(int $id): JsonResponse
-    // {
-    //     try {
-    //         $response = $this->imageRepository->deleteImage($id);
-    //         return $this->json(['message' => 'Image deleted successfully']);
-    //     } catch (\Exception $e) {
-    //         return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['DELETE'])]
+    public function deleteImage(int $id): JsonResponse
+    {
+        try {
+            $response = $this->imageRepository->deleteImage($id);
+            return $this->json(['message' => 'Image deleted successfully']);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }*/
 
-    // #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
-    // public function getAllStats(): Response
-    // {
-    //     $stats = $this->statRepository->getAllStats();
-    //     return $this->render('admin/stats.html.twig', [
-    //         'stats' => $stats,
-    //     ]);
-    // }
+    #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
+    public function getAllStats(): Response
+    {
+        $stats = $this->statRepository->getAllStats();
+        return $this->render('admin/stats.html.twig', [
+            'stats' => $stats,
+        ]);
+    }
 
     #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['POST'])]
     public function deleteImage(int $id): Response
