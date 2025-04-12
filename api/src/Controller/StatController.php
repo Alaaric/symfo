@@ -14,13 +14,22 @@ final class StatController extends AbstractController
     public function __construct(
         private StatRepository $statRepository,
         private StatOutputDtoMapper $statMapper
-    ) {
-    }
+    ) {}
 
     #[Route(name: 'get_all_stats', methods: ['GET'])]
     public function index(): JsonResponse
     {
         $stats = $this->statRepository->findAll();
+
+        $data = $this->statMapper->mapToStatOutputDto($stats);
+
+        return $this->json($data);
+    }
+
+    #[Route('/top', name: 'get_top_stats', methods: ['GET'])]
+    public function test(): JsonResponse
+    {
+        $stats = $this->statRepository->findTop20ByWeek((new \DateTime())->format('o-W'));
 
         $data = $this->statMapper->mapToStatOutputDto($stats);
 
