@@ -4,6 +4,9 @@
 
 {% block body %}
     <h1>Gestion des Images</h1>
+    <form method="post" action="{{ path('send_stats_mail') }}">
+        <button class="btn btn-primary">Envoyer le mail stats</button>
+    </form>
 
     <h2>Images actuelles</h2>
      <table border="1">
