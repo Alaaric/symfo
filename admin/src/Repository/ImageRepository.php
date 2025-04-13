@@ -27,11 +27,11 @@ class ImageRepository
                 'Content-Type' => 'application/json',
             ],
         ]);
-    
+
         if ($response->getStatusCode() !== 204) {
             throw new \Exception('Failed to delete image');
         }
-    
+
         return ['message' => 'Image deleted successfully'];
     }
 }

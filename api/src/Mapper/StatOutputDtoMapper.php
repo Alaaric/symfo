@@ -12,9 +12,9 @@ class StatOutputDtoMapper
      * @param Stat[] $stats
      * @return StatOutputDto[]
      */
-    public function mapToStatOutputDto(array $stats): array
+    public function mapToStatOutputDto(array $stats, ?array $globalStats = null): array
     {
-        return array_map(function ($stat) {
+        $dto = array_map(function ($stat) {
             return new StatOutputDto(
                 $stat->getId(),
                 $stat->getWeek(),
@@ -24,7 +24,22 @@ class StatOutputDtoMapper
                 $stat->getImage()->getName()
             );
         }, $stats);
+
+        if ($globalStats !== null) {
+            foreach ($globalStats as $globalStat) {
+                $dto[] = new StatOutputDto(
+                    0,
+                    'all',
+                    $globalStat['totalViews'],
+                    $globalStat['totalDownloads'],
+                    $globalStat['imageId'],
+                    $globalStat['imageName']
+                );
+            }
+        }
+
+
+
+        return $dto;
     }
-
-
 }

@@ -17,6 +17,25 @@ class StatRepository
         return $response->toArray();
     }
 
+    public function getCustomStats(string $column, string $order, int $limit, ?string $week = null): array
+    {
+        $queryParams = [
+            'column' => $column,
+            'order' => $order,
+            'limit' => $limit,
+        ];
+
+        if ($week !== null) {
+            $queryParams['week'] = $week;
+        }
+
+        $response = $this->httpClient->request('GET', self::API_URL . '/custom?' .  http_build_query($queryParams), [
+            'query' => $queryParams,
+        ]);
+
+        return $response->toArray();
+    }
+
     public function triggerWeeklyReport(): void
     {
         $this->httpClient->request('POST', self::API_URL . '/send-weekly-stats');
