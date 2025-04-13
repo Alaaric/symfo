@@ -108,10 +108,12 @@ php bin/console messenger:consume scheduler_email
 
 ## Remarques
 
+- Les Appels à l'api depuis les Repository coté Client et Admin plutôt que dans des services est un choix d'architecture.
 - Les commandes sont adaptées à un environnement Windows avec Git Bash, vous pouvez adapter les commandes selon votre environnement ou lancer manuellement chaque symfony sur les bon port.
 - Le projet n’ayant pas pour but d’être en production et est plus un POC qu'une réel application, par simplicité :
   - Le SSL est désactivé.
-  - Aucune vérification de données n’est faite (back comme front).
+  - Aucune vérification de données n’est faite (ni front ni back ni api).
   - Aucune protection n’est en place.
-  - Les images sont enregistrés dans un dossier public et donc accessible sans controle
-  - L'architecture est loin d'être correct
+  - Les images sont enregistrés dans un dossier public et donc accessible sans controle.
+  - L'architecture est loin d'être correct.
+  - Les vues ont pour but d'être fonctionnel. Pas d'UI/UX.

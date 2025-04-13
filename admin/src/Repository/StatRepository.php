@@ -2,8 +2,6 @@
 
 namespace App\Repository;
 
-use App\Dto\StatDto;
-use App\Mapper\StatMapper;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class StatRepository
@@ -17,5 +15,10 @@ class StatRepository
         $response = $this->httpClient->request('GET', self::API_URL);
 
         return $response->toArray();
+    }
+
+    public function triggerWeeklyReport(): void
+    {
+        $this->httpClient->request('POST', self::API_URL . '/send-weekly-stats');
     }
 }
