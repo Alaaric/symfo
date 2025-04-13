@@ -44,13 +44,6 @@ final class ImageController extends AbstractController
         return $this->json(['message' => 'Image uploaded', 'filename' => $image->getFileName()], Response::HTTP_CREATED);
     }
 
-    #[Route('/{id}', name: 'get_image', methods: ['GET'])]
-    public function show(Image $image): JsonResponse
-    {
-        $serialisedImage = $this->serializer->serialize($image, 'json', ['groups' => ['image:read']]);
-        return new JsonResponse($serialisedImage, Response::HTTP_OK, [], true);
-    }
-
     #[Route('/{id}/file', name: 'view_image', methods: ['GET'])]
     public function getImageFile(Request $request, Image $image, StatsTracker $statsTracker): BinaryFileResponse
     {
