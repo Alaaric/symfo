@@ -8,6 +8,7 @@ use App\Service\ChartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/admin')]
 final class AdminController extends AbstractController
@@ -17,7 +18,7 @@ final class AdminController extends AbstractController
         private StatRepository $statRepository
     ) {}
 
-    #[Route(name: 'app_admin')]
+    #[Route(name: 'admin')]
     public function index(): Response
     {
         $data = $this->imageRepository->getAllImages();
@@ -51,5 +52,15 @@ final class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin');
+    }
+
+    #[Route('/admin/send-mail', name: 'send_stats_mail', methods: ['POST'])]
+    public function sendMail(): RedirectResponse
+    {
+        $this->statRepository->triggerWeeklyReport();
+
+        $this->addFlash('success', 'Email envoyé !');
+
+        return $this->redirectToRoute('admin');
     }
 }
