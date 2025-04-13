@@ -12,7 +12,8 @@ use ApiPlatform\Metadata\GetCollection;
 #[ApiResource(
     operations: [
         new GetCollection(uriTemplate: '/stats', name: 'get_all_stats')
-])]
+    ]
+)]
 class Stat
 {
     #[ORM\Id]
@@ -25,11 +26,9 @@ class Stat
     private ?Image $image = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['image:read'])]
     private ?string $week = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['image:read'])]
     private ?int $views = null;
 
     #[ORM\Column(nullable: true)]

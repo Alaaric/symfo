@@ -96,7 +96,7 @@ php bin/console d:f:l
 - http://127.0.0.1:8001 pour l’admin
 - http://127.0.0.1:8002 pour l’API
 
-5. Démarrer les Workers **dans le dossier api**:
+5. Démarrer les Workers **s'il n'ont pas été lancé avec la commande `make start-all` dans le dossier api**:
 
 ```bash
 php bin/console messenger:consume async
@@ -117,3 +117,4 @@ php bin/console messenger:consume scheduler_email
   - Les images sont enregistrés dans un dossier public et donc accessible sans controle.
   - L'architecture est loin d'être correct.
   - Les vues ont pour but d'être fonctionnel. Pas d'UI/UX.
+  - Une bonne partie du code n'est pas propre.
