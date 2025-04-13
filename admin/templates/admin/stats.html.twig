@@ -25,7 +25,7 @@
 
         <label for="week">Semaine :</label>
         <select name="week" id="week">
-            <option value="all" {% if not app.request.get('week') %}selected{% endif %}>Toutes les semaines</option>
+            <option value="all" {% if not app.request.get('week') %}selected{% endif %}>Total</option>
             {% for availableWeek in availableWeeks %}
                 <option value="{{ availableWeek }}" {% if app.request.get('week') == availableWeek %}selected{% endif %}>
                     {{ availableWeek }}
