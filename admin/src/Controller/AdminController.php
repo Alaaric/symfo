@@ -70,17 +70,17 @@ final class AdminController extends AbstractController
         }
     }
 
-    #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['POST'])]
-    public function deleteImage(int $id): Response
+    #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['DELETE'])]
+    public function deleteImage(int $id): ?Response
     {
         try {
-            $this->imageRepository->deleteImage($id);
+            $this->imageRepository->delete($id);
             $this->addFlash('success', 'Image deleted successfully');
         } catch (\Exception $e) {
             $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
         }
 
-        return $this->redirectToRoute('app_admin');
+        return $this->redirectToRoute('admin');
     }
 
     #[Route('/send-mail', name: 'send_stats_mail', methods: ['POST'])]

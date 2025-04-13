@@ -20,13 +20,9 @@ class ImageRepository
         return $response->toArray();
     }
 
-    public function deleteImage(int $id): array
+    public function delete(int $id): array
     {
-        $response = $this->httpClient->request('POST', self::API_URL . $id, [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+        $response = $this->httpClient->request('POST', self::API_URL . "delete/$id");
 
         if ($response->getStatusCode() !== 204) {
             throw new \Exception('Failed to delete image');
