@@ -24,4 +24,31 @@ class StatRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function getGlobalStats(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select('IDENTITY(s.image) as imageId, i.name as imageName, SUM(s.views) as totalViews, SUM(s.download) as totalDownloads')
+            ->join('s.image', 'i')
+            ->groupBy('s.image, i.name')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getStatsByColumnOrderAndLimit(string $column, string $order, int $limit, ?string $week = null): array
+    {
+
+
+        $qb = $this->createQueryBuilder('s')
+            ->select('s')
+            ->orderBy('s.' . $column, $order)
+            ->setMaxResults($limit);
+
+        if ($week !== null) {
+            $qb->andWhere('s.week = :week')
+                ->setParameter('week', $week);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

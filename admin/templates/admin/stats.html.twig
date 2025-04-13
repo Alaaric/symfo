@@ -5,7 +5,33 @@
 {% block body %}
     <h1>Statistiques des Images</h1>
 
-    {{ render_chart(chart) }}
-    {# <canvas id="statsChart" width="10" height="10"></canvas> #}
+    
+
+        <form id="customStatsForm" method="get" action="{{ path('admin_custom_stats') }}">
+        <label for="column">Colonne :</label>
+        <select name="column" id="column">
+            <option value="views" {% if app.request.get('column') == 'views' %}selected{% endif %}>Vues</option>
+            <option value="download" {% if app.request.get('column') == 'download' %}selected{% endif %}>Téléchargements</option>
+        </select>
+
+        <label for="order">Ordre :</label>
+        <select name="order" id="order">
+            <option value="ASC" {% if app.request.get('order') == 'ASC' %}selected{% endif %}>Croissant</option>
+            <option value="DESC" {% if app.request.get('order') == 'DESC' %}selected{% endif %}>Décroissant</option>
+        </select>
+
+        <label for="limit">Limite :</label>
+        <input type="number" name="limit" id="limit" value="{{ app.request.get('limit', 30) }}" min="1">
+
+        <label for="week">Semaine :</label>
+        <input type="text" name="week" id="week" value="{{ app.request.get('week') }}" placeholder="Ex: 2025-W15">
+
+        <button type="submit">Générer</button>
+    </form>
+    
+    <h2>Graphique des statistiques</h2>
+    
+        {{ render_chart(chart) }}
+
 
 {% endblock %}
