@@ -40,7 +40,7 @@ class ChartService
                 ],
                 'title' => [
                     'display' => true,
-                    'text' => 'Statistiques des images (vues et téléchargements)',
+                    'text' => 'Statistiques personnalisées',
                 ],
             ],
             'scales' => [

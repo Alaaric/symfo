@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/admin')]
 final class AdminController extends AbstractController
@@ -39,6 +40,30 @@ final class AdminController extends AbstractController
         return $this->render('admin/stats.html.twig', [
             'chart' => $chart,
         ]);
+    }
+
+    #[Route('/stats/custom', name: 'admin_custom_stats', methods: ['GET'])]
+    public function getCustomStats(Request $request, ChartService $chartService): Response
+    {
+        $column = $request->query->get('column', 'views');
+        $order = $request->query->get('order', 'DESC');
+        $limit = (int) $request->query->get('limit', 30);
+        $week = $request->query->get('week');
+
+        try {
+            $stats = $this->statRepository->getCustomStats($column, $order, $limit, $week);
+
+            $chart = $chartService->createBarChart($stats);
+
+            return $this->render('admin/stats.html.twig', [
+                'customStats' => $stats,
+                'chart' => $chart,
+            ]);
+        } catch (\RuntimeException $e) {
+            return $this->render('admin/error.html.twig', [
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['POST'])]
