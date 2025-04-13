@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\ImageDownloadService;
 
-#[Route('/images')]
 final class ImageController extends AbstractController
 {
     private ImageRepository $imageRepository;
@@ -23,13 +22,23 @@ final class ImageController extends AbstractController
         $this->imageRepository = $imageRepository;
     }
 
-    #[Route(name: 'images', methods: ['GET'])]
+    #[Route('/', name: 'images', methods: ['GET'])]
     public function index(): Response
     {
         $data = $this->imageRepository->getAllImages();
 
         return $this->render('images/images.html.twig', [
             'images' => $data,
+        ]);
+    }
+
+    #[Route('/image/file/{imgName}', name: 'display_image', methods: ['GET'])]
+    public function listImageFiles(string $imgName): Response
+    {
+        $file = $this->imageRepository->getImageFileForDisplay($imgName);
+
+        return new Response($file, Response::HTTP_OK, [
+            'Content-Type' => 'image/jpeg',
         ]);
     }
 

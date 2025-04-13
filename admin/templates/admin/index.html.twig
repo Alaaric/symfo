@@ -14,7 +14,7 @@
             <tr>
                 <th>Nom</th>
                 <th>Image</th>
-                <th>Lien</th>
+                <th>aperçu</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -23,9 +23,9 @@
                 <tr>
                     <td>{{ image.name }}</td>
                     <td>
-                        <img src="http://localhost:8002/uploads/images/{{ image.file_name }}" alt="{{ image.name }}" style="max-width: 100px; max-height: 100px;">
+                        <img src="{{ path('display_image', {'imgName': image.file_name}) }}" alt="{{ image.name }}" style="max-width: 100px; max-height: 100px;">
                     </td>
-                    <td><a href="http://localhost:8002/images/{{ image.id }}/file" target="_blank">Voir</a></td>
+                    <td><a href="{{ path('image', {'id': image.id}) }}" target="_blank">Aperçu</a></td>
                     <td>
                         <form action="{{ path('admin_delete_image', {'id': image.id}) }}" method="delete" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');">
                             <input type="hidden" name="_method" value="DELETE">

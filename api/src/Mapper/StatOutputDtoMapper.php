@@ -31,7 +31,7 @@ class StatOutputDtoMapper
         }, $stats);
 
         if ($globalStats !== null) {
-            $dto = array_merge($dto, $this->totalMapper->mapGlobalStatsToDto($globalStats));
+            $dto = array_merge($this->totalMapper->mapGlobalStatsToDto($globalStats), $dto);
         }
 
         return $dto;

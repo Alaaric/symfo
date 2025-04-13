@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-#[Route('/admin')]
 final class AdminController extends AbstractController
 {
     public function __construct(
@@ -19,7 +18,7 @@ final class AdminController extends AbstractController
         private StatRepository $statRepository
     ) {}
 
-    #[Route(name: 'admin')]
+    #[Route('/', name: 'admin')]
     public function index(): Response
     {
         $data = $this->imageRepository->getAllImages();
@@ -39,6 +38,7 @@ final class AdminController extends AbstractController
         $chart = $chartService->createBarChart($stats);
 
         return $this->render('admin/stats.html.twig', [
+            'stats' => $stats,
             'chart' => $chart,
             'availableWeeks' => $availableWeeks,
         ]);
@@ -59,7 +59,7 @@ final class AdminController extends AbstractController
             $chart = $chartService->createBarChart($stats);
 
             return $this->render('admin/stats.html.twig', [
-                'customStats' => $stats,
+                'stats' => $stats,
                 'chart' => $chart,
                 'availableWeeks' => $availableWeeks,
             ]);
@@ -83,7 +83,7 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin');
     }
 
-    #[Route('/admin/send-mail', name: 'send_stats_mail', methods: ['POST'])]
+    #[Route('/send-mail', name: 'send_stats_mail', methods: ['POST'])]
     public function sendMail(): RedirectResponse
     {
         $this->statRepository->triggerWeeklyReport();
@@ -91,5 +91,25 @@ final class AdminController extends AbstractController
         $this->addFlash('success', 'Email envoyé !');
 
         return $this->redirectToRoute('admin');
+    }
+
+    #[Route('images/{id}', name: 'image', methods: ['GET'])]
+    public function getImage(int $id): Response
+    {
+        $data = $this->imageRepository->getImageById($id);
+
+        return new Response($data, Response::HTTP_OK, [
+            'Content-Type' => 'image/jpeg',
+        ]);
+    }
+
+    #[Route('/image/file/{imgName}', name: 'display_image', methods: ['GET'])]
+    public function listImageFiles(string $imgName): Response
+    {
+        $file = $this->imageRepository->getImageFileForDisplay($imgName);
+
+        return new Response($file, Response::HTTP_OK, [
+            'Content-Type' => 'image/jpeg',
+        ]);
     }
 }
