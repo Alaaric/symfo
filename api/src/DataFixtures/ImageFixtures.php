@@ -11,12 +11,12 @@ class ImageFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $placeholders = [
-            ['filename' => 'chat1.jpg', 'name' => 'Chat 1'],
-            ['filename' => 'chat2.jpg', 'name' => 'Chat 2'],
-            ['filename' => 'chat3.jpg', 'name' => 'Chat 3'],
-            ['filename' => 'chat4.jpg', 'name' => 'Chat 4'],
-            ['filename' => 'chat5.jpg', 'name' => 'Chat 5'],
-            ['filename' => 'chat6.jpg', 'name' => 'Chat 6'],
+            ['filename' => 'chat1.jpg', 'name' => 'Chat1.jpg'],
+            ['filename' => 'chat2.jpg', 'name' => 'Chat2.jpg'],
+            ['filename' => 'chat3.jpg', 'name' => 'Chat3.jpg'],
+            ['filename' => 'chat4.jpg', 'name' => 'Chat4.jpg'],
+            ['filename' => 'chat5.jpg', 'name' => 'Chat5.jpg'],
+            ['filename' => 'chat6.jpg', 'name' => 'Chat6.jpg'],
         ];
 
         foreach ($placeholders as $data) {

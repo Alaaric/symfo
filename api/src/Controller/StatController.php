@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Mapper\StatOutputDtoForTotalMapper;
 use App\Service\EmailService;
 use App\Mapper\StatOutputDtoMapper;
 use App\Repository\StatRepository;
@@ -42,21 +43,31 @@ final class StatController extends AbstractController
     }
 
     #[Route('/custom', name: 'custom_stats', methods: ['GET'])]
-    public function getCustomStats(Request $request): JsonResponse
+    public function getCustomStats(Request $request, StatOutputDtoForTotalMapper $totalMapper): JsonResponse
     {
-        $column = $request->query->get('column', 'views');
-        $order = $request->query->get('order', 'DESC');
-        $limit = (int) $request->query->get('limit', 30);
-        $week = $request->query->get('week', (new \DateTime())->format('o-W'));
+        $column = $request->query->get('column');
+        $order = $request->query->get('order');
+        $limit = (int) $request->query->get('limit');
+        $week = $request->query->get('week');
 
         try {
             $stats = $this->statRepository->getStatsByColumnOrderAndLimit($column, $order, $limit, $week);
 
-            $data = $this->statMapper->mapToStatOutputDto($stats);
+
+            $data = $week === 'all' ? $totalMapper->mapGlobalStatsToDto($stats) : $this->statMapper->mapToStatOutputDto($stats);
+
             return $this->json($data);
         } catch (\InvalidArgumentException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    #[Route('/available-weeks', name: 'get_available_weeks', methods: ['GET'])]
+    public function getAvailableWeeks(): JsonResponse
+    {
+        $weeks = $this->statRepository->getAvailableWeeks();
+
+        return $this->json(array_column($weeks, 'week'));
     }
 
     #[Route('/send-weekly-stats', name: 'send_weekly_stats', methods: ['POST'])]

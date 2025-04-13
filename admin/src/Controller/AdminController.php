@@ -34,11 +34,13 @@ final class AdminController extends AbstractController
     {
 
         $stats = $this->statRepository->getAllStats();
+        $availableWeeks = $this->statRepository->getAvailableWeeks();
 
         $chart = $chartService->createBarChart($stats);
 
         return $this->render('admin/stats.html.twig', [
             'chart' => $chart,
+            'availableWeeks' => $availableWeeks,
         ]);
     }
 
@@ -52,12 +54,14 @@ final class AdminController extends AbstractController
 
         try {
             $stats = $this->statRepository->getCustomStats($column, $order, $limit, $week);
+            $availableWeeks = $this->statRepository->getAvailableWeeks();
 
             $chart = $chartService->createBarChart($stats);
 
             return $this->render('admin/stats.html.twig', [
                 'customStats' => $stats,
                 'chart' => $chart,
+                'availableWeeks' => $availableWeeks,
             ]);
         } catch (\RuntimeException $e) {
             return $this->render('admin/error.html.twig', [

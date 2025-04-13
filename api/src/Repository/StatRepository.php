@@ -35,20 +35,35 @@ class StatRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getStatsByColumnOrderAndLimit(string $column, string $order, int $limit, ?string $week = null): array
+    public function getStatsByColumnOrderAndLimit(string $column, string $order, int $limit, string $week): array
     {
+        $qb = $this->createQueryBuilder('s');
 
-
-        $qb = $this->createQueryBuilder('s')
-            ->select('s')
-            ->orderBy('s.' . $column, $order)
-            ->setMaxResults($limit);
-
-        if ($week !== null) {
-            $qb->andWhere('s.week = :week')
-                ->setParameter('week', $week);
+        if ($week === 'all') {
+            return $qb->select('IDENTITY(s.image) as imageId, i.name as imageName, SUM(s.views) as totalViews, SUM(s.download) as totalDownloads')
+                ->join('s.image', 'i') // Jointure avec l'entité Image
+                ->groupBy('s.image, i.name')
+                ->orderBy('SUM(s.' . $column . ')', $order) // Tri basé sur la somme de la colonne
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->select('s')
+            ->andWhere('s.week = :week')
+            ->setParameter('week', $week)
+            ->orderBy('s.' . $column, $order)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getAvailableWeeks(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select('DISTINCT s.week')
+            ->orderBy('s.week', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

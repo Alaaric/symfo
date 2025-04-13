@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class StatRepository
@@ -32,6 +33,17 @@ class StatRepository
         $response = $this->httpClient->request('GET', self::API_URL . '/custom?' .  http_build_query($queryParams), [
             'query' => $queryParams,
         ]);
+
+        return $response->toArray();
+    }
+
+    public function getAvailableWeeks(): array
+    {
+        $response = $this->httpClient->request('GET', self::API_URL . '/available-weeks');
+
+        if ($response->getStatusCode() !== Response::HTTP_OK) {
+            throw new \RuntimeException('Erreur lors de la récupération des semaines disponibles.');
+        }
 
         return $response->toArray();
     }
