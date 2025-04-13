@@ -4,12 +4,10 @@ namespace App\Controller;
 
 use App\Repository\ImageRepository;
 use App\Repository\StatRepository;
+use App\Service\ChartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
-use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/admin')]
 final class AdminController extends AbstractController
@@ -18,15 +16,6 @@ final class AdminController extends AbstractController
         private ImageRepository $imageRepository,
         private StatRepository $statRepository
     ) {}
-
-    //Alaric
-    /*#[Route(name: 'app_admin')]
-    public function index(): Response
-    {
-       return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
-       ]);
-    }*/
 
     #[Route(name: 'app_admin')]
     public function index(): Response
@@ -38,51 +27,16 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    //Alaric
-    /*#[Route('/stats', name: 'admin_stats', methods: ['GET'])]
-    public function getAllStats(): JsonResponse
-    {
-        try {
-            $stats = $this->statRepository->getAllStats();
-            return $this->json($stats);
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }*/
-
-   #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
-    public function getAllStats(): Response
-    {
-        try {
-            $stats = $this->statRepository->getAllStats();
-            return $this->render('admin/stats.html.twig', [
-                'stats' => json_encode($stats),
-            ]);
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['DELETE'])]
-    public function deleteImage(int $id): JsonResponse
-    {
-        try {
-            $response = $this->imageRepository->deleteImage($id);
-            return $this->render('admin/index.html.twig', [
-                'images' => $data,
-            ]);
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }*/
-
     #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
-    public function getAllStats(): Response
+    public function getAllStats(ChartService $chartService): Response
     {
+
         $stats = $this->statRepository->getAllStats();
+
+        $chart = $chartService->createBarChart($stats);
+
         return $this->render('admin/stats.html.twig', [
-            'stats' => $stats,
+            'chart' => $chart,
         ]);
     }
 
