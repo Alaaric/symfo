@@ -24,7 +24,7 @@
                     </td>
                     <td><a href="http://localhost:8002/images/{{ image.id }}/file" target="_blank">Voir</a></td>
                     <td>
-                        <form action="{{ path('admin_delete_image', {'id': image.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');">
+                        <form action="{{ path('admin_delete_image', {'id': image.id}) }}" method="delete" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit">Supprimer</button>
                         </form>
