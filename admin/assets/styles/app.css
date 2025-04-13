@@ -32,7 +32,7 @@ th, td {
     border: 1px solid #444;
     padding: 12px;
     text-align: left;
-    color: #333;
+    color: #007BFF;
 }
 
 th {
@@ -54,10 +54,6 @@ tr:hover {
     color: #000;
 }
 
-/* Specific styling for name column */
-td:first-child {
-    color: #007BFF; /* Blue text for the first column, assuming it's the name */
-}
 
 /* Styles pour les formulaires */
 form {
@@ -85,4 +81,50 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+
+/* Styles pour le header */
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+header nav ul li {
+    display: inline;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #007BFF;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+footer p {
+    margin: 0;
 }

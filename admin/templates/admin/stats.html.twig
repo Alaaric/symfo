@@ -40,5 +40,27 @@
     
         {{ render_chart(chart) }}
 
+         <h2>Tableau des statistiques</h2>
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Semaine</th>
+                <th>Vues</th>
+                <th>Téléchargements</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in stats %}
+                <tr>
+                    <td>{{ stat.imageName }}</td>
+                    <td>{{ stat.week }}</td>
+                    <td>{{ stat.views }}</td>
+                    <td>{{ stat.downloads }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 
 {% endblock %}

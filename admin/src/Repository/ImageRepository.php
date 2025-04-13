@@ -34,4 +34,18 @@ class ImageRepository
 
         return ['message' => 'Image deleted successfully'];
     }
+
+    public function getImageById(int $id): string
+    {
+        $response = $this->httpClient->request('GET', self::API_URL . $id . '/file');
+
+        return $response->getContent();
+    }
+
+    public function getImageFileForDisplay(string $imgName): string
+    {
+        $response = $this->httpClient->request('GET', "http://localhost:8002/uploads/images/$imgName");
+
+        return $response->getContent();
+    }
 }
