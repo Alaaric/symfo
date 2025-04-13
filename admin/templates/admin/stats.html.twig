@@ -24,7 +24,14 @@
         <input type="number" name="limit" id="limit" value="{{ app.request.get('limit', 30) }}" min="1">
 
         <label for="week">Semaine :</label>
-        <input type="text" name="week" id="week" value="{{ app.request.get('week') }}" placeholder="Ex: 2025-W15">
+        <select name="week" id="week">
+            <option value="all" {% if not app.request.get('week') %}selected{% endif %}>Toutes les semaines</option>
+            {% for availableWeek in availableWeeks %}
+                <option value="{{ availableWeek }}" {% if app.request.get('week') == availableWeek %}selected{% endif %}>
+                    {{ availableWeek }}
+                </option>
+            {% endfor %}
+        </select>
 
         <button type="submit">Générer</button>
     </form>

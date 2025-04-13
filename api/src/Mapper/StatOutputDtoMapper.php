@@ -4,9 +4,14 @@ namespace App\Mapper;
 
 use App\Dto\StatOutputDto;
 use App\Entity\Stat;
+use App\Mapper\StatOutputDtoForTotalMapper;
 
 class StatOutputDtoMapper
 {
+
+    public function __construct(
+        private readonly StatOutputDtoForTotalMapper $totalMapper
+    ) {}
 
     /**
      * @param Stat[] $stats
@@ -26,19 +31,8 @@ class StatOutputDtoMapper
         }, $stats);
 
         if ($globalStats !== null) {
-            foreach ($globalStats as $globalStat) {
-                $dto[] = new StatOutputDto(
-                    0,
-                    'all',
-                    $globalStat['totalViews'],
-                    $globalStat['totalDownloads'],
-                    $globalStat['imageId'],
-                    $globalStat['imageName']
-                );
-            }
+            $dto = array_merge($dto, $this->totalMapper->mapGlobalStatsToDto($globalStats));
         }
-
-
 
         return $dto;
     }
