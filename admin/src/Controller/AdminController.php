@@ -38,7 +38,8 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    /* #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
+    //Alaric
+    /*#[Route('/stats', name: 'admin_stats', methods: ['GET'])]
     public function getAllStats(): JsonResponse
     {
         try {
@@ -47,14 +48,30 @@ final class AdminController extends AbstractController
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }*/
+
+   #[Route('/stats', name: 'admin_stats', methods: ['GET'])]
+    public function getAllStats(): Response
+    {
+        try {
+            $stats = $this->statRepository->getAllStats();
+            return $this->render('admin/stats.html.twig', [
+                'stats' => json_encode($stats),
+            ]);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     #[Route('/image/delete/{id}', name: 'admin_delete_image', methods: ['DELETE'])]
     public function deleteImage(int $id): JsonResponse
     {
         try {
             $response = $this->imageRepository->deleteImage($id);
-            return $this->json(['message' => 'Image deleted successfully']);
+            return $this->render('admin/index.html.twig', [
+                'images' => $data,
+            ]);
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
