@@ -74,7 +74,7 @@ final class ImageController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'delete_image', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'delete_image', methods: ['POST'])]
     public function delete(Image $image): JsonResponse
     {
         $filePath = $this->getParameter('images_directory') . '/' . $image->getFilename();
