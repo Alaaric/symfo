@@ -44,7 +44,6 @@ class Image
      * @var Collection<int, Stat>
      */
     #[ORM\OneToMany(targetEntity: Stat::class, mappedBy: 'image', orphanRemoval: true)]
-    #[Groups(['image:read'])]
     private Collection $stats;
 
     public function __construct()

@@ -40,7 +40,7 @@ class ChartService
                 ],
                 'title' => [
                     'display' => true,
-                    'text' => 'Statistiques personnalisées',
+                    'text' => 'Statistiques',
                 ],
             ],
             'scales' => [
